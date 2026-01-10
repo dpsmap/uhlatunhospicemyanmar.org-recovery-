@@ -463,6 +463,252 @@
             <div class="entry-content">
               <div id="et-boc" class="et-boc">
                 <div class="et_builder_inner_content et_pb_gutters3">
+                  <!--  -->
+<!--  -->
+                  <style>
+                    /* Lightbox styles */
+                    .lightbox {
+                      display: none;
+                      position: fixed;
+                      z-index: 1000;
+                      left: 0;
+                      top: 0;
+                      width: 100%;
+                      height: 100%;
+                      background-color: rgba(0, 0, 0, 0.9);
+                      overflow: auto;
+                    }
+
+                    .lightbox-content {
+                      position: relative;
+                      margin: auto;
+                      padding: 20px;
+                      width: 80%;
+                      max-width: 1200px;
+                      margin-top: 50px;
+                    }
+
+                    .lightbox-img {
+                      display: block;
+                      margin: 0 auto;
+                      max-width: 100%;
+                      max-height: 80vh;
+                    }
+
+                    .close {
+                      position: absolute;
+                      top: 15px;
+                      right: 35px;
+                      color: #f1f1f1;
+                      font-size: 40px;
+                      font-weight: bold;
+                      cursor: pointer;
+                    }
+
+                    .prev, .next {
+                      cursor: pointer;
+                      position: absolute;
+                      top: 50%;
+                      width: auto;
+                      padding: 16px;
+                      margin-top: -50px;
+                      color: white;
+                      font-weight: bold;
+                      font-size: 30px;
+                      transition: 0.6s ease;
+                      border-radius: 0 3px 3px 0;
+                      user-select: none;
+                      -webkit-user-select: none;
+                      background-color: rgba(0, 0, 0, 0.5);
+                    }
+
+                    .next {
+                      right: 0;
+                      border-radius: 3px 0 0 3px;
+                    }
+
+                    .prev:hover, .next:hover {
+                      background-color: rgba(0, 0, 0, 0.8);
+                    }
+
+                    .lightbox-caption {
+                      margin: 15px 0;
+                      text-align: center;
+                      color: white;
+                      font-size: 16px;
+                    }
+
+                    * {
+                      box-sizing: border-box;
+                    }
+
+                    div.gallery {
+                      display: flex;
+                      flex-wrap: wrap;
+                      justify-content: flex-start;
+                    }
+
+                    div.gallery-item {
+                      margin: 5px;
+                      border: 1px solid #ccc;
+                      width: calc(25% - 20px);
+                    }
+
+                    div.gallery-item:hover {
+                      border: 1px solid #777;
+                    }
+
+                    div.gallery-item img {
+                      width: 100%;
+                      height: auto;
+                    }
+
+                    div.gallery-item div.desc {
+                      padding: 15px;
+                      text-align: center;
+                    }
+
+                    @media only screen and (max-width: 768px) {
+                      div.gallery-item {
+                        width: calc(50% - 20px);
+                      }
+                    }
+
+                    @media only screen and (max-width: 480px) {
+                      div.gallery-item {
+                        width: calc(100% - 20px);
+                      }
+                    }
+                  </style>
+                  <div style="background-color: white; padding: 20px;">
+                    <h2>Prof.Dr.Aye Aye Myint (Radiation Oncologist)</h2>
+                    <!-- <h4>Click on any image to view full size</h4> -->
+                    <div class="gallery" id="dynamicGallery">
+                      <!-- Images will be loaded here by JavaScript -->
+                    </div>
+                  </div>
+
+                  <!-- Lightbox HTML -->
+                  <div id="imageLightbox" class="lightbox">
+                    <span class="close">&times;</span>
+                    <div class="lightbox-content">
+                      <img class="lightbox-img" id="lightboxImage" src="" alt="">
+                      <div class="lightbox-caption" id="lightboxCaption"></div>
+                    </div>
+                    <a class="prev" id="prevBtn">&#10094;</a>
+                    <a class="next" id="nextBtn">&#10095;</a>
+                  </div>
+
+                  <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                      const imageFiles = [
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)1.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)2.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)3.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)4.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)5.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)6.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)7.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)8.jpg',
+                          'Prof.Dr.Aye Aye Myint (Radiation Oncologist)9.jpg',
+                      ];
+
+                      // Lightbox elements
+                      const lightbox = document.getElementById('imageLightbox');
+                      const lightboxImg = document.getElementById('lightboxImage');
+                      const lightboxCaption = document.getElementById('lightboxCaption');
+                      const closeBtn = document.querySelector('.close');
+                      const prevBtn = document.getElementById('prevBtn');
+                      const nextBtn = document.getElementById('nextBtn');
+                      
+                      let currentImageIndex = 0;
+
+                      // Create gallery items
+                      const gallery = document.getElementById('dynamicGallery');
+                      
+                      imageFiles.forEach((imageFile, index) => {
+                          const galleryItem = document.createElement('div');
+                          galleryItem.className = 'gallery-item';
+                          
+                          const img = document.createElement('img');
+                          img.src = 'assets/images/Prof.Dr.Aye Aye Myint (Radiation Oncologist)/' + encodeURIComponent(imageFile);
+                          img.alt = '27th Anniversary Image ' + (index + 1);
+                          img.width = 300;
+                          img.height = 200;
+                          img.style.cursor = 'pointer';
+                          
+                          const desc = document.createElement('div');
+                          desc.className = 'desc';
+                          // desc.textContent = 'Image ' + (index + 1);
+                          
+                          // Add click event to open lightbox
+                          img.addEventListener('click', function() {
+                              currentImageIndex = index;
+                              updateLightbox();
+                              lightbox.style.display = 'block';
+                              document.body.style.overflow = 'hidden'; // Prevent scrolling when lightbox is open
+                          });
+                          
+                          galleryItem.appendChild(img);
+                          // galleryItem.appendChild(desc);
+                          gallery.appendChild(galleryItem);
+                      });
+
+                      // Lightbox functions
+                      function updateLightbox() {
+                          const imageUrl = 'assets/images/27th/' + encodeURIComponent(imageFiles[currentImageIndex]);
+                          lightboxImg.src = imageUrl;
+                          lightboxCaption.textContent = 'Image ' + (currentImageIndex + 1) + ' of ' + imageFiles.length;
+                      }
+
+                      // Close lightbox
+                      closeBtn.onclick = function() {
+                          lightbox.style.display = 'none';
+                          document.body.style.overflow = 'auto';
+                      };
+
+                      // Navigate to previous image
+                      prevBtn.onclick = function(e) {
+                          e.stopPropagation();
+                          currentImageIndex = (currentImageIndex - 1 + imageFiles.length) % imageFiles.length;
+                          updateLightbox();
+                      };
+
+                      // Navigate to next image
+                      nextBtn.onclick = function(e) {
+                          e.stopPropagation();
+                          currentImageIndex = (currentImageIndex + 1) % imageFiles.length;
+                          updateLightbox();
+                      };
+
+                      // Close when clicking outside the image
+                      lightbox.onclick = function(e) {
+                          if (e.target === lightbox) {
+                              lightbox.style.display = 'none';
+                              document.body.style.overflow = 'auto';
+                          }
+                      };
+
+                      // Keyboard navigation
+                      document.addEventListener('keydown', function(e) {
+                          if (lightbox.style.display === 'block') {
+                              if (e.key === 'Escape') {
+                                  lightbox.style.display = 'none';
+                                  document.body.style.overflow = 'auto';
+                              } else if (e.key === 'ArrowLeft') {
+                                  currentImageIndex = (currentImageIndex - 1 + imageFiles.length) % imageFiles.length;
+                                  updateLightbox();
+                              } else if (e.key === 'ArrowRight') {
+                                  currentImageIndex = (currentImageIndex + 1) % imageFiles.length;
+                                  updateLightbox();
+                              }
+                          }
+                      });
+                  });
+                  </script>
+
+                  <!--  -->
+                  <!--  -->
                   <div class="et_pb_section et_pb_section_0 et_section_regular">
                     <div class="et_pb_row et_pb_row_0">
                       <div
